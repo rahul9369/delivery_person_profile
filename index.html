@@ -195,17 +195,23 @@
                 type="text"
                 id="username"
                 name="username"
-                placeholder="Username" />
+                placeholder="Username"
+                disabled />
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="Email" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                disabled />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="user_type">User Type</label>
-              <select id="user_type" name="user_type">
+              <select id="user_type" name="user_type" disabled>
                 <option value="" disabled selected>User Type</option>
                 <option value="delivery_person">Delivery Person</option>
                 <option value="customer">Customer</option>
@@ -218,7 +224,8 @@
                 type="text"
                 id="name"
                 name="name"
-                placeholder="Full Name" />
+                placeholder="Full Name"
+                disabled />
             </div>
           </div>
           <div class="form-row">
@@ -228,7 +235,8 @@
                 type="tel"
                 id="phone_number"
                 name="phone_number"
-                placeholder="Phone Number" />
+                placeholder="Phone Number"
+                disabled />
             </div>
             <div class="form-group">
               <label for="address">Address</label>
@@ -236,7 +244,8 @@
                 type="text"
                 id="address"
                 name="address"
-                placeholder="Address" />
+                placeholder="Address"
+                disabled />
             </div>
           </div>
           <div class="form-row">
@@ -246,7 +255,8 @@
                 type="text"
                 id="aadhaar_card_number"
                 name="aadhaar_card_number"
-                placeholder="Aadhaar Card Number" />
+                placeholder="Aadhaar Card Number"
+                disabled />
             </div>
             <div class="form-group">
               <label for="vehicle_details">Vehicle Details</label>
@@ -254,13 +264,17 @@
                 type="text"
                 id="vehicle_details"
                 name="vehicle_details"
-                placeholder="Vehicle Details" />
+                placeholder="Vehicle Details"
+                disabled />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="availability_status">Availability Status</label>
-              <select id="availability_status" name="availability_status">
+              <select
+                id="availability_status"
+                name="availability_status"
+                disabled>
                 <option value="" disabled selected>Availability Status</option>
                 <option value="Available">Available</option>
                 <option value="Unavailable">Unavailable</option>
@@ -273,7 +287,8 @@
                 id="rating"
                 name="rating"
                 step="0.1"
-                placeholder="Rating" />
+                placeholder="Rating"
+                disabled />
             </div>
           </div>
           <div class="button-group">
@@ -330,59 +345,80 @@
               document.getElementById("rating").value = data.rating || "";
             })
             .catch((error) => {
-              console.error(error);
-              alert("Error fetching user profile");
+              console.error("Error fetching user profile:", error);
             });
         }
       });
 
-      const saveButton = document.getElementById("saveButton");
+      // Toggle edit mode and save functionality
+      document
+        .getElementById("saveButton")
+        .addEventListener("click", function () {
+          const formElements =
+            document.getElementById("userProfileForm").elements;
 
-      saveButton.addEventListener("click", function () {
-        const form = document.getElementById("userProfileForm");
-
-        if (saveButton.innerHTML === "Change Information") {
-          // Enable form fields for editing
-          Array.from(form.elements).forEach((element) => {
-            element.disabled = false;
-          });
-
-          saveButton.innerHTML = "Save";
-        } else {
-          const token = getToken();
-          if (token) {
-            const formData = new FormData(form);
-
-            fetch("http://13.201.28.236:8000/update-profile-delivery-person/", {
-              method: "PUT",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              body: formData,
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Failed to update profile");
-                }
-                return response.json();
-              })
-              .then((data) => {
-                console.log("Profile updated successfully", data);
-
-                // Disable form fields after saving
-                Array.from(form.elements).forEach((element) => {
-                  element.disabled = true;
-                });
-
-                saveButton.innerHTML = "Change Information";
-              })
-              .catch((error) => {
-                console.error(error);
-                alert("Error updating profile");
+          if (this.innerText === "Change Information") {
+            for (let element of formElements) {
+              element.disabled = false;
+            }
+            this.innerText = "Save";
+          } else {
+            const token = getToken();
+            if (token) {
+              const formData = new FormData(
+                document.getElementById("userProfileForm")
+              );
+              const jsonData = {};
+              formData.forEach((value, key) => {
+                jsonData[key] = value;
               });
+
+              fetch(
+                "http://13.201.28.236:8000/update-profile-delivery-person/",
+                {
+                  method: "PUT",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(jsonData),
+                }
+              )
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("Failed to save user profile");
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  console.log("Profile saved:", data);
+
+                  // Disable the form fields after saving
+                  for (let element of formElements) {
+                    element.disabled = true;
+                  }
+                  this.innerText = "Change Information";
+                })
+                .catch((error) => {
+                  console.error("Error saving user profile:", error);
+                });
+            }
           }
-        }
-      });
+        });
+
+      // Image upload functionality
+      document
+        .getElementById("imageUpload")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              document.getElementById("profileImage").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
     </script>
   </body>
 </html>
