@@ -31,18 +31,23 @@
       .image-section {
         width: 30%;
         text-align: center;
-        border: 1px solid #ddd;
-        padding-bottom: 20px;
         margin: 5px;
         border-radius: 10px;
-        height: 350px;
+        height: 70vh;
       }
 
       .image-section img {
         width: 200px;
         height: 200px;
         border-radius: 50%;
-        margin-bottom: 20px;
+        margin: 20px;
+      }
+
+      .image-container {
+        border: 1px solid rgb(203, 203, 203);
+        border-radius: 5px;
+        height: auto;
+        background-color: white;
       }
 
       .image-section input {
@@ -57,42 +62,62 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      .change-password-section {
+        margin-top: 20px;
+      }
+
+      .change-password-section button {
+        background-color: white;
+        color: black;
+        width: 100%;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        border: 1px solid rgb(203, 203, 203);
+      }
+
+      .change-password-section button:hover {
+        background-color: #dfdede;
       }
 
       .form-section {
-        margin-top: 10px;
         width: 70%;
         border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 10px;
+        background-color: #fff;
+        height: fit-content;
         margin: 5px;
       }
 
-      h2 {
+      h4 {
         text-align: center;
-        margin-top: 15px;
-        background-color: #16a290;
-        padding: 10px;
+        padding: 1px;
         border-radius: 5px;
-        color: white;
+        color: black;
       }
 
       .form-group {
         display: flex;
         flex-direction: column;
-        width: 48%;
-        padding: 0px 10px;
+        width: 50%;
+        padding: 0px 20px;
+        margin-bottom: 20px;
       }
 
       .form-group label {
         color: #333;
-        font-weight: 12px;
-        padding: 1px;
+        font-size: 14px;
+        padding: 5px 0;
       }
 
       .form-group input,
       .form-group select {
         width: 100%;
-        padding: 8px;
+        padding: 10px;
         border-radius: 5px;
         border: 1px solid #ced4da;
         font-size: 14px;
@@ -102,7 +127,7 @@
       .form-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 20px;
+        flex-wrap: wrap;
       }
 
       button {
@@ -121,7 +146,10 @@
       }
 
       .button-group {
-        font-size: bold;
+        display: flex;
+
+        justify-content: flex-start;
+        margin-bottom: 20px;
         margin-left: 20px;
       }
 
@@ -161,24 +189,38 @@
   </head>
   <body>
     <div class="container">
+      <!-- Image and Change Password Section -->
+
       <div class="image-section">
-        <div
-          style="
-            background-color: rgba(33, 40, 50, 0.03);
-            padding: 10px;
-            margin-bottom: 10px;
-          ">
-          <h4>Profile Picture</h4>
+        <div class="image-container">
+          <div
+            style="
+              background-color: rgba(33, 40, 50, 0.03);
+              padding: 10px;
+              margin-bottom: 10px;
+            ">
+            <h4>Profile Picture</h4>
+          </div>
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Profile Picture"
+            id="profileImage" />
+          <br />
+          <input type="file" id="imageUpload" accept="image/*" />
+          <label for="imageUpload">Upload new image</label>
+          <br />
+          <br />
+          <br />
         </div>
-        <img
-          src="https://via.placeholder.com/150"
-          alt="Profile Picture"
-          id="profileImage" />
-        <br />
-        <input type="file" id="imageUpload" accept="image/*" />
-        <label for="imageUpload">Upload new image</label>
+        <div class="change-password-section">
+          <button id="changePasswordButton" type="button">
+            Change Password
+          </button>
+        </div>
       </div>
-      <div class="form-section">
+
+      <!-- Main Form Section -->
+      <div class="form-section" id="formSection">
         <h4
           style="
             background-color: rgba(33, 40, 50, 0.03);
@@ -296,6 +338,60 @@
           </div>
         </form>
       </div>
+
+      <!-- Change Password Form (Initially Hidden) -->
+      <div
+        class="form-section"
+        id="changePasswordSection"
+        style="display: none">
+        <div
+          style="
+            background-color: rgba(33, 40, 50, 0.03);
+            padding: 10px;
+            margin-bottom: 10px;
+          ">
+          <h4>Change Password</h4>
+        </div>
+        <form id="changePasswordForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="old_password">Old Password</label>
+              <input
+                type="password"
+                id="old_password"
+                name="old_password"
+                placeholder="Old Password"
+                required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new_password">New Password</label>
+              <input
+                type="password"
+                id="new_password"
+                name="new_password"
+                placeholder="New Password"
+                required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="confirm_new_password">Confirm New Password</label>
+              <input
+                type="password"
+                id="confirm_new_password"
+                name="confirm_new_password"
+                placeholder="Confirm New Password"
+                required />
+            </div>
+          </div>
+          <div class="button-group">
+            <button type="submit">Submit</button>
+            <button type="button" id="cancelChangePassword">Cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script>
@@ -398,9 +494,11 @@
                     element.disabled = true;
                   }
                   this.innerText = "Change Information";
+                  alert("Profile updated successfully!");
                 })
                 .catch((error) => {
                   console.error("Error saving user profile:", error);
+                  alert("Failed to update profile. Please try again.");
                 });
             }
           }
@@ -415,8 +513,82 @@
             const reader = new FileReader();
             reader.onload = function (e) {
               document.getElementById("profileImage").src = e.target.result;
+              // Optionally, you can upload the image to the server here
             };
             reader.readAsDataURL(file);
+          }
+        });
+
+      // Toggle between profile form and change password form
+      document
+        .getElementById("changePasswordButton")
+        .addEventListener("click", function () {
+          document.getElementById("formSection").style.display = "none";
+          document.getElementById("changePasswordSection").style.display =
+            "block";
+        });
+
+      // Cancel Change Password
+      document
+        .getElementById("cancelChangePassword")
+        .addEventListener("click", function () {
+          document.getElementById("changePasswordForm").reset();
+          document.getElementById("changePasswordSection").style.display =
+            "none";
+          document.getElementById("formSection").style.display = "block";
+        });
+
+      // Change Password Form submission
+      document
+        .getElementById("changePasswordForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const token = getToken(); // Use your existing getToken function
+
+          if (token) {
+            const oldPassword = document.getElementById("old_password").value;
+            const newPassword = document.getElementById("new_password").value;
+            const confirmNewPassword = document.getElementById(
+              "confirm_new_password"
+            ).value;
+
+            if (newPassword !== confirmNewPassword) {
+              alert("New password and confirmation do not match.");
+              return;
+            }
+
+            const requestData = {
+              old_password: oldPassword,
+              new_password: newPassword,
+            };
+
+            fetch("http://13.201.28.236:8000/change-password/", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Failed to change password");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Password changed:", data);
+                alert("Password changed successfully!");
+                // Optionally redirect back to profile form
+                document.getElementById("changePasswordForm").reset();
+                document.getElementById("changePasswordSection").style.display =
+                  "none";
+                document.getElementById("formSection").style.display = "block";
+              })
+              .catch((error) => {
+                console.error("Error changing password:", error);
+                alert("Failed to change password. Please try again.");
+              });
           }
         });
     </script>
