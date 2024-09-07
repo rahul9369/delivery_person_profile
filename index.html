@@ -31,8 +31,6 @@
       .image-section {
         width: 30%;
         text-align: center;
-        margin: 5px;
-        border-radius: 10px;
         height: 70vh;
       }
 
@@ -41,13 +39,12 @@
         height: 200px;
         border-radius: 50%;
         margin: 20px;
+        background-color: black;
       }
 
       .image-container {
-        border: 1px solid rgb(203, 203, 203);
-        border-radius: 5px;
         height: auto;
-        background-color: white;
+        background-color: black;
       }
 
       .image-section input {
@@ -60,28 +57,32 @@
         color: #fff;
         padding: 10px 20px;
         border: none;
-        border-radius: 5px;
+
         cursor: pointer;
         margin-bottom: 20px;
       }
 
       .change-password-section {
-        margin-top: 20px;
       }
 
       .change-password-section button {
-        background-color: white;
-        color: black;
+        background-color: black;
+        color: white;
         width: 100%;
         padding: 10px 20px;
-        border-radius: 5px;
+
         cursor: pointer;
         margin-bottom: 20px;
-        border: 1px solid rgb(203, 203, 203);
       }
 
       .change-password-section button:hover {
-        background-color: #dfdede;
+        background-color: #1d1d1d;
+      }
+      .button {
+        cursor: pointer;
+      }
+      .button button:hover {
+        background-color: #1d1d1d;
       }
 
       .form-section {
@@ -90,14 +91,13 @@
         border-radius: 10px;
         background-color: #fff;
         height: fit-content;
-        margin: 5px;
       }
 
       h4 {
         text-align: center;
         padding: 1px;
         border-radius: 5px;
-        color: black;
+        color: white;
       }
 
       .form-group {
@@ -205,13 +205,20 @@
             src="https://via.placeholder.com/150"
             alt="Profile Picture"
             id="profileImage" />
+          <figcaption style="text-align: center; color: white">
+            YOUR NAME
+          </figcaption>
           <br />
           <input type="file" id="imageUpload" accept="image/*" />
-          <label for="imageUpload">Upload new image</label>
-          <br />
-          <br />
+
           <br />
         </div>
+        <div class="button" style="background-color: black; padding: 5px">
+          <botton style="background-color: black; color: white; width: 100%"
+            >Dashboard</botton
+          >
+        </div>
+
         <div class="change-password-section">
           <button id="changePasswordButton" type="button">
             Change Password
@@ -546,6 +553,7 @@
           const token = getToken(); // Use your existing getToken function
 
           if (token) {
+            console.log(token);
             const oldPassword = document.getElementById("old_password").value;
             const newPassword = document.getElementById("new_password").value;
             const confirmNewPassword = document.getElementById(
@@ -558,7 +566,7 @@
             }
 
             const requestData = {
-              old_password: oldPassword,
+              current_password: oldPassword,
               new_password: newPassword,
             };
 
